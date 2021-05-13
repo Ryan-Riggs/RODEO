@@ -1,4 +1,3 @@
-
 library(sf)
 library(geosphere)
 library(tidyverse)
@@ -27,10 +26,10 @@ if (!"zyp" %in% rownames(installed.packages())){
   install.packages("zyp")}; require(zyp)
 
 ##Error functions. 
-source("E:/research/2019_08_30_rivObs/git/src/Error_stats_functions.R")
+source("ErrorFunctions.R")
 
-Eff_widths = map_df(list.files("E:\\research\\RODEO\\VariableBuffers\\6xLength3xWidth\\USGS\\VariableBuffers_3xLength_1.5Width_USGS", full.names = TRUE), ~vroom(.x))
-gageinfo = read.csv("E:\\research\\GRWL\\GRWL_2015_present\\width_val\\input\\gaugeData\\USGS\\gaugeTable.csv")
+Eff_widths = map_df(list.files("USGS_widths", full.names = TRUE), ~vroom(.x))
+gageinfo = read.csv("gaugeTable.csv")
 
 ####################################################################################################################
 ##Assign closest gauge location to data points. 
