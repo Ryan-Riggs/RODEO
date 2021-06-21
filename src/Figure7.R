@@ -8,6 +8,12 @@ library(gridExtra)
 library(ggpubr)
 library(grid)
 library(cowplot)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(RColorBrewer)
+
 
 l_vals = read.csv("E:\\research\\RODEO\\VariableBuffers\\6xLength3xWidth\\stats_1\\l_vals.csv")
 u_vals = read.csv("E:\\research\\RODEO\\VariableBuffers\\6xLength3xWidth\\stats_1\\u_vals.csv")
@@ -41,12 +47,6 @@ plot(kge, gage_stats$KGE, xlim = c(-1,1), ylim = c(-1,1))
 
 
 
-
-
-
-
-
-
 #############################################################################################################################################
 ##Combined USGS and GRDC gauges and determine cal/val gauges. 
 ###############################################################################################################################
@@ -63,6 +63,13 @@ gage_stats = gage_stats[filtering, ]
 l_vals = l_vals[filtering,]
 u_vals = u_vals[filtering,]
 sd_vals = sd_vals[filtering,]
+
+
+l_vals = l_vals %>%select(-X)
+u_vals = u_vals %>%select(-X)
+sd_vals = sd_vals %>%select(-X)
+
+
 #######################################################################################
 ##Subset into training/validation gauges. 
 #######################################################################################
@@ -219,8 +226,8 @@ p1 = ggplot(data = tall[tall$calibration =="Uncalibrated",], aes(x = value, y = 
                parse = TRUE)+ylab("Estimated Error")+xlab("Actual Error")+
   coord_trans(x="log10", y="log10", xlim = c(mn, mx), ylim = c(mn,mx))+
   guides(color = guide_legend(override.aes = list(size = 3) ) )+
-  scale_x_continuous("Actual Error", breaks = c(.1,1,10,100,1000,10000), labels = trans_format('log10',math_format(10^.x)))+
-  scale_y_continuous("Estimated Error", breaks = c(.1,1,10,100,1000,10000), labels = trans_format('log10',math_format(10^.x)))+
+  scale_x_continuous("Actual Error", breaks = c(.001,.01,.1,1,10,100,1000,10000), labels = trans_format('log10',math_format(10^.x)))+
+  scale_y_continuous("Estimated Error", breaks = c(.001, .01,.1,1,10,100,1000,10000), labels = trans_format('log10',math_format(10^.x)))+
   theme_bw()+ggtitle("Uncalibrated")+
   theme(plot.title = element_text(hjust = 0.5),panel.grid.major = element_blank(), panel.grid.minor = element_blank(), strip.background = element_blank(),
         strip.text.y = element_blank(), strip.text.x = element_blank(), axis.text.x = element_blank(),
@@ -249,8 +256,8 @@ p2 = ggplot(data = tall[tall$calibration =="Calibrated",], aes(x = value, y = y,
                parse = TRUE)+ylab("Estimated Error")+xlab("Actual Error")+
   guides(color = guide_legend(override.aes = list(size = 3) ) )+
   coord_trans(x="log10", y="log10", xlim = c(mn, mx), ylim = c(mn,mx))+
-  scale_x_continuous("Actual Error", breaks = c(.1,1,10,100,1000,10000), labels = trans_format('log10',math_format(10^.x)))+
-  scale_y_continuous("Estimated Error", breaks = c(.1,1,10,100,1000,10000), labels = trans_format('log10',math_format(10^.x)))+
+  scale_x_continuous("Actual Error", breaks = c(.001, .01,.1,1,10,100,1000,10000), labels = trans_format('log10',math_format(10^.x)))+
+  scale_y_continuous("Estimated Error", breaks = c(.001, .01,.1,1,10,100,1000,10000), labels = trans_format('log10',math_format(10^.x)))+
   theme_bw()+ggtitle("Calibrated")+
   theme(plot.title = element_text(hjust = 0.5),panel.grid.major = element_blank(), panel.grid.minor = element_blank(), strip.background = element_blank(),
         strip.text.y = element_blank(), strip.text.x = element_blank(), legend.title = element_blank(), axis.title.x = element_blank(), axis.title.y = element_blank())+
