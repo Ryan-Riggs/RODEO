@@ -20,33 +20,6 @@ u_vals = read.csv("E:\\research\\RODEO\\VariableBuffers\\6xLength3xWidth\\stats_
 sd_vals = read.csv("E:\\research\\RODEO\\VariableBuffers\\6xLength3xWidth\\stats_1\\sd_vals.csv")
 gage_stats = read.csv("E:\\research\\RODEO\\VariableBuffers\\6xLength3xWidth\\stats_1\\gage_stats.csv")
 
-st = as.vector(457)
-kge = as.vector(457)
-for(i in 1:nrow(l_vals)){
-  l = l_vals[i,2:ncol(l_vals)]
-  u = u_vals[i,2:ncol(u_vals)]
-  landsat = unlist(l)
-  usgs = unlist(u)
-  error = landsat-usgs
-  st_val = sd.p(error)
-  st[i] = st_val
-  kge[i] = KGE(landsat,usgs)
-}
-
-plot.new()
-plot((gage_stats$RMSE), sqrt((gage_stats$STDE^2) + abs(gage_stats$Bias^2)), xlim = c(min(rmse_estimate, na.rm = TRUE), max(rmse_estimate, na.rm = TRUE)),
-     ylim = c(min(rmse_estimate, na.rm = TRUE), max(rmse_estimate, na.rm = TRUE)))
-abline(0,1)
-
-
-#gage_stats$STDE = st
-gage_stats$RMSE - sqrt((st^2) + abs(gage_stats$Bias^2))
-plot(kge, gage_stats$KGE, xlim = c(-1,1), ylim = c(-1,1))
-
-
-
-
-
 #############################################################################################################################################
 ##Combined USGS and GRDC gauges and determine cal/val gauges. 
 ###############################################################################################################################
